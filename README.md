@@ -1,63 +1,74 @@
-push
-====
+d
+=
 
 # Abstract
-A generic deployment tool for #node.js
+A generic deploy tool for #node.js
 
 # Features
 - Uses git to manage versioning
 - Binary differential deployments (only deploy your changes)
 - An interactive REPL mode
 - API agnostic
-- Uses directory context similar to npm (less typing)
+- Uses directory context (similar to npm)
 
 ## go into interactive mode (REPL)
-`push`
+`d`
 
 ## login or out from the api server of which you will push to
-`push login`, 
-`push logout`
+`d login`, `d logout`
 
 ## Push code as a new or existing app
-`push up`
+`d push`
+
+## Push code from an existing app
+`d pull`
+
+## Push specific version of code from an existing app
+`d pull <version>`
 
 ## Push remote code as a new or existing app
-`push remote`
+`d remote`
 
 ## Set the remote for a push (a git url)
-`push remote <name>`
+`d remote <name>`
 
 ## Stop, Start or Restart an app
-`push start`,
-`push stop`, 
-`push restart`
+`d start`,
+`d stop`,
+`d restart`
 
-## List all deployed applications 
-`push -a`
+## Get the status of a deployed app
+`d info`
 
-## Set environment variable for an app
-`push -e <name> <value>`
+## View the package.json of a deployed app
+`d view`
 
-## Get environment variable(s) for an app
-`push -e`,
-`push -e <name>`
+## List all deployed applications
+`d list`
 
-## Clear an environment variable for an app
-`push -e <name> -c`
+## Environment variables
 
-## Delete environment variable for an app
-`push -e <name> -d`
+### Set environment variable for an app
+`d env <name> <value>`
 
-## Get all the info for an app
-`push -i`
+### Get environment variables for an app
+`d env`,
+
+### Get a single environment variable from an app
+`d env <name>`
+
+### Clear an environment variable for an app
+`d env <name> -c`
+
+### Delete environment variable for an app
+`d env <name> -d`
 
 ## Push server to use a particular version of an app (git version)
-`push version <version>`
+`d version <version>`
 
 ## Show logs for an app
-`push -l`
+`d logs`
 
 ## Display the current version (of push)
-`push --version`
-
+`d --version`
 

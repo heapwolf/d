@@ -1,6 +1,6 @@
 {
-  "name": "push",
-  "description": "n/a",
+  "name": "d",
+  "description": "A Generic deployment tool for nodejs",
   "author": "Paolo Fragomeni <paolo@async.ly>",
   "version": "0.0.1",
   "contributors": [
