@@ -1,7 +1,0 @@
-#!/usr/bin/env node
-
-require('../lib/jitsu/completion');
-
-var push = require('../lib/push');
-
-

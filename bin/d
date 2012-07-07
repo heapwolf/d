@@ -1,0 +1,93 @@
+#!/usr/bin/env node
+
+var push = require('../lib/push'),
+    repl = require('repl'),
+    fs = require('fs'),
+    path = require('path'),
+    asni = require('ansi')(process.stdout);
+
+var package = require(__dirname + '/../package.json');
+var pathname = __dirname + '/../lib/commands';
+var commands = {};
+
+//
+// get all of the commands from the commands directory,
+// require them so they can be used with the REPL or via
+// arguments that are provided from the command line.
+//
+fs.readdirSync(pathname).forEach(function (name) {
+
+  if (path.extname(name) === '.js') {
+
+    var basename = path.basename(name, '.js');
+    var rawfile = path.join(pathname, basename);
+
+    commands[basename] = require(rawfile);
+  }
+});
+
+//
+// if there are no arguments provided at the commandline
+// we want to go into interactive mode.
+
+if (process.argv.length === 2) {
+
+  var prompt = package.name + ' ' + package.version + '>';
+  
+  //
+  // create a repl that will process input and run the appropriate commands.
+  //
+  var rpl = repl.start(prompt, null, function evil(cmd, r, name, fn) {
+
+    //
+    // the repl will give us the contents of the line as a string we can split.
+    //
+    var args = cmd.replace(/^\(|\)$/g, '').replace('\n', '').split(' ');
+    
+    //
+    // the first arg will be the command to execute.
+    //
+    var command = args.splice(0, 1)[0];
+    
+    if (command === 'help') {
+      if (args[0]) {
+
+        //
+        // if a second argument was provided, print its help and usage.
+        //
+        console.log(commands[args[0]].help.join('\n') + '\n'); 
+        console.log('Usage: ' + commands[args[0]].usage.join('\n') + '\n');
+      }
+      else {
+
+        //
+        // print all of the usage for each command
+        //
+        console.log('Help'.underline + '\n');
+
+        for (var command in commands) {
+          if (commands[command].usage) {
+            console.log(commands[command].usage.join('\n'));
+          }
+        }
+      }
+    }
+    else if (commands[command] && commands[command].command) {
+      commands[command].command.apply(commands, args);
+    }
+    else {
+      console.log('Unrecognized command, type `help`, `help <command>` or `.help` for help');
+    }
+
+    repl.repl.displayPrompt();
+  });
+ 
+}
+else {
+
+  //
+  // not repl mode
+  //
+
+
+}

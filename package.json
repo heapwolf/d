@@ -11,6 +11,9 @@
     "url": "http://github.com/hij1nx/push.git" 
   },
   "dependencies": {
+    "optimist": "*",
+    "ansi": "*",
+    "colors": "*"
   },
   "main": "./lib/broadway",
   "engines": { "node": ">= 0.8.0" }
