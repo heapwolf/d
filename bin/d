@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var push = require('../lib/push'),
+var deploytool = require('../lib/d'),
     repl = require('repl'),
     fs = require('fs'),
     path = require('path'),
@@ -8,7 +8,8 @@ var push = require('../lib/push'),
 
 var package = require(__dirname + '/../package.json');
 var pathname = __dirname + '/../lib/commands';
-var commands = {};
+
+var commands = deploytool.commands = {};
 
 //
 // get all of the commands from the commands directory,
@@ -29,7 +30,6 @@ fs.readdirSync(pathname).forEach(function (name) {
 //
 // if there are no arguments provided at the commandline
 // we want to go into interactive mode.
-
 if (process.argv.length === 2) {
 
   var prompt = package.name + ' ' + package.version + '>';
@@ -55,7 +55,7 @@ if (process.argv.length === 2) {
         //
         // if a second argument was provided, print its help and usage.
         //
-        console.log(commands[args[0]].help.join('\n') + '\n'); 
+        console.log('\n' + commands[args[0]].help.join('\n') + '\n'); 
         console.log('Usage: ' + commands[args[0]].usage.join('\n') + '\n');
       }
       else {
@@ -63,17 +63,19 @@ if (process.argv.length === 2) {
         //
         // print all of the usage for each command
         //
-        console.log('Help'.underline + '\n');
+        console.log('\nHelp'.underline + '\n');
 
         for (var command in commands) {
           if (commands[command].usage) {
             console.log(commands[command].usage.join('\n'));
           }
         }
+
+        console.log('\n');
       }
     }
     else if (commands[command] && commands[command].command) {
-      commands[command].command.apply(commands, args);
+      commands[command].command.call(deploytool, args);
     }
     else {
       console.log('Unrecognized command, type `help`, `help <command>` or `.help` for help');
