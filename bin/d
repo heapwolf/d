@@ -1,15 +1,17 @@
 #!/usr/bin/env node
 
-var deploytool = require('../lib/d'),
+var deploytool = require('../lib/deploytool'),
     repl = require('repl'),
     fs = require('fs'),
     path = require('path'),
+    argv = require('optimist').argv,
     asni = require('ansi')(process.stdout);
 
 var package = require(__dirname + '/../package.json');
 var pathname = __dirname + '/../lib/commands';
 
 var commands = deploytool.commands = {};
+var log = console.log;
 
 //
 // get all of the commands from the commands directory,
@@ -30,7 +32,8 @@ fs.readdirSync(pathname).forEach(function (name) {
 //
 // if there are no arguments provided at the commandline
 // we want to go into interactive mode.
-if (process.argv.length === 2) {
+//
+var replHandler = function replHandler(config) {
 
   var prompt = package.name + ' ' + package.version + '>';
   
@@ -50,46 +53,90 @@ if (process.argv.length === 2) {
     var command = args.splice(0, 1)[0];
     
     if (command === 'help') {
-      if (args[0]) {
-
-        //
-        // if a second argument was provided, print its help and usage.
-        //
-        console.log('\n' + commands[args[0]].help.join('\n') + '\n'); 
-        console.log('Usage: ' + commands[args[0]].usage.join('\n') + '\n');
-      }
-      else {
-
-        //
-        // print all of the usage for each command
-        //
-        console.log('\nHelp'.underline + '\n');
-
-        for (var command in commands) {
-          if (commands[command].usage) {
-            console.log(commands[command].usage.join('\n'));
-          }
-        }
-
-        console.log('\n');
-      }
+      printHelp(args[0]);
     }
     else if (commands[command] && commands[command].command) {
-      commands[command].command.call(deploytool, args);
+      commands[command].command.call(deploytool, args, config);
     }
     else {
-      console.log('Unrecognized command, type `help`, `help <command>` or `.help` for help');
+      log('Unrecognized command, type `help`, `help <command>` or `.help` for help');
     }
 
     repl.repl.displayPrompt();
   });
  
-}
-else {
+};
+
+var cliHandler = function cliHandler(config) {
+
+  var command = argv._.splice(0, 1); // splice out the first item.
 
   //
-  // not repl mode
+  // if the user wants help on a particular command.
   //
+  if (argv.h || argv.help || command === 'help') {
 
+    printHelp(argv._[0]); // the new first item of the array.
+  }
+  else if (commands[command]) {
 
-}
+    //
+    // pass in the arguments that the user wants to send to
+    // the command as well as the configuration for this repo.
+    //
+    commands[command].command.call(deploytool, argv._, config);
+  }
+};
+
+var handler = process.argv.length === 2 ? replHandler : cliHandler;
+
+//
+// ensure we have a git repository, if we don't, initalize one.
+//
+deploytool.git.init(function(err) {
+
+  if (err) {
+
+    throw err;
+  }
+  else {
+
+    //
+    // get the information about the repo.
+    //
+    deploytool.git.repoInfo(function(err, data) {
+
+      if (err) {
+        throw err;
+      }
+      handler(data);
+    });
+  }
+});
+
+var printHelp = function printHelp(command) {
+
+  if (command && commands[command]) {
+
+    //
+    // if a second argument was provided, print its help and usage.
+    //
+    log('\n' + commands[command].help.join('\n') + '\n'); 
+    log('Usage: ' + commands[command].usage.join('\n') + '\n');
+  }
+  else {
+
+    //
+    // print all of the usage for each command
+    //
+    console.log('\nHelp'.underline + '\n');
+
+    for (var command in commands) {
+      if (commands[command].usage) {
+        console.log(commands[command].usage.join('\n'));
+      }
+    }
+    console.log('\n');
+  }
+};
+

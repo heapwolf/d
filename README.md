@@ -1,5 +1,5 @@
-d
-=
+deploytool
+==========
 
 # Abstract
 A generic deploy tool for #node.js
@@ -17,20 +17,14 @@ A generic deploy tool for #node.js
 ## login or out from the api server of which you will push to
 `d login`, `d logout`
 
-## Push code as a new or existing app
-`d push`
+## Push code from the local directory or a remote as a new or existing app
+`d push [remote]`
 
 ## Push code from an existing app
 `d pull`
 
 ## Push specific version of code from an existing app
 `d pull <version>`
-
-## Push remote code as a new or existing app
-`d remote`
-
-## Set the remote for a push (a git url)
-`d remote <name>`
 
 ## Stop, Start or Restart an app
 `d start`,
