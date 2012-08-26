@@ -6,13 +6,14 @@ var deploytool = require('../lib/deploytool'),
     path = require('path'),
     ansi = require('ansi'),
     argv = require('optimist').argv,
+    common = require('../lib/common'),
     asni = require('ansi')(process.stdout);
 
 var package = require(__dirname + '/../package.json');
 var pathname = __dirname + '/../lib/commands';
 
 var commands = deploytool.commands = {};
-var log = console.log;
+var log = common.log;
 
 //
 // get all of the commands from the commands directory,
@@ -60,7 +61,7 @@ var replHandler = function replHandler(config) {
       commands[command].command.call(deploytool, args, config);
     }
     else {
-      log('Unrecognized command, type `help`, `help <command>` or `.help` for help');
+      log(0, 'Unrecognized command, type `help`, `help <command>` or `.help` for help');
     }
 
     repl.repl.displayPrompt();
@@ -112,7 +113,7 @@ deploytool.git.init(function(err) {
       }
 
       var user = deploytool.git.getUserIdentity(data);
-      log('logged in as', user.name, '(' + user.id + ')');
+      log(0, 'logged in as', user.name, '(' + user.id + ')');
 
       handler(data);
     });
@@ -126,22 +127,25 @@ var printMessage = function printMessage(command) {
     //
     // if a second argument was provided, print its help and usage.
     //
-    log('\n' + commands[command].help.join('\n') + '\n'); 
-    log('Usage: ' + commands[command].usage.join('\n') + '\n');
+    log(-1, '\n' + commands[command].help.join('\n') + '\n'); 
+    log(-1, 'Usage: ' + commands[command].usage.join('\n') + '\n');
   }
   else {
 
     //
     // print all of the usage for each command
     //
-    console.log('\nHelp'.underline + '\n');
+    log(-1, '\nHelp'.underline + '\n');
 
     for (var command in commands) {
       if (commands[command].usage) {
-        console.log(commands[command].usage.join('\n'));
+        log(-1, commands[command].usage.join('\n'));
       }
     }
-    console.log('\n');
+    log(-1, '\n');
   }
 };
 
+process.on('exit', function() {
+  log(-1, '\n');
+});
