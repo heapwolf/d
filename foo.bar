@@ -1,13 +1,13 @@
 total 48
 drwxr-xr-x  13     442 Aug 26 15:35 ./
 drwxr-xr-x   4     136 Aug 22 18:05 ../
-drwxr-xr-x  14     476 Aug 26 15:41 .git/
+drwxr-xr-x  14     476 Aug 26 16:13 .git/
 -rw-r--r--   1     162 Jul  7 02:17 .gitignore
 -rw-r--r--   1   12288 Aug 21 22:57 .package.json.swp
 -rw-r--r--   1    1319 Jul  9 23:30 README.md
 drwxr-xr-x   4     136 Aug 26 15:26 bin/
 drwxr-xr-x   3     102 Aug 26 15:26 config/
--rw-r--r--   1       0 Aug 26 15:45 foo.bar
+-rw-r--r--   1       0 Aug 26 16:56 foo.bar
 drwxr-xr-x   6     204 Aug 26 15:26 lib/
 drwxr-xr-x   7     238 Aug 23 18:33 node_modules/
 -rw-r--r--   1     488 Aug 25 15:25 package.json
