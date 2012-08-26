@@ -57,8 +57,13 @@ var replHandler = function replHandler(config) {
     if (command === 'help') {
       printMessage(args[0]);
     }
+    else if (command === 'exit' || command === 'quit') {
+      process.exit(0);
+    }
     else if (commands[command] && commands[command].command) {
-      commands[command].command.call(deploytool, args, config);
+      commands[command].command.call(deploytool, args, config, function() {
+        process.stdin.emit('keypress', '\r', { name: 'enter', ctrl: false, meta: false, shift: false }); 
+      });
     }
     else {
       log(0, 'Unrecognized command, type `help`, `help <command>` or `.help` for help');
