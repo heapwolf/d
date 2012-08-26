@@ -113,7 +113,7 @@ deploytool.git.init(function(err) {
       }
 
       var user = deploytool.git.getUserIdentity(data);
-      log(0, 'logged in as', user.name, '(' + user.id + ')');
+      log(0, 'Logged in as', user.name, '(' + user.id + ')');
 
       handler(data);
     });
