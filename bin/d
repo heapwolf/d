@@ -6,14 +6,29 @@ var deploytool = require('../lib/deploytool'),
     path = require('path'),
     ansi = require('ansi'),
     argv = require('optimist').argv,
+    dpkg = require('../package.json'),
     common = require('../lib/common'),
     asni = require('ansi')(process.stdout);
 
-var package = require(__dirname + '/../package.json');
+
 var pathname = __dirname + '/../lib/commands';
 
 var commands = deploytool.commands = {};
 var log = common.log;
+var pkg;
+
+log(0, 'deploytool v' + dpkg.version);
+log(0, 'node ' + process.version);
+
+try {
+
+  pkg = require(process.cwd() + '/package.json');
+}
+catch(ex) {
+  
+  log(2, 'No package.json file found in this directory.\r\n');
+  process.exit(1);
+}
 
 //
 // get all of the commands from the commands directory,
@@ -37,7 +52,7 @@ fs.readdirSync(pathname).forEach(function (name) {
 //
 var replHandler = function replHandler(config) {
 
-  var prompt = package.name + ' ' + package.version + '>';
+  var prompt = pkg.name + ' ' + pkg.version + '>';
   
   //
   // create a repl that will process input and run the appropriate commands.
@@ -53,20 +68,30 @@ var replHandler = function replHandler(config) {
     // the first arg will be the command to execute.
     //
     var command = args.splice(0, 1)[0];
-    
-    if (command === 'help') {
+
+    if (command === '') {
+      // do nothing. 
+    }
+    else if (command === 'help') {
       printMessage(args[0]);
     }
     else if (command === 'exit' || command === 'quit') {
       process.exit(0);
     }
     else if (commands[command] && commands[command].command) {
+      
+      //
+      // attempt to execute a command that appears to exist.
+      //
       commands[command].command.call(deploytool, args, config, function() {
         process.stdin.emit('keypress', '\r', { name: 'enter', ctrl: false, meta: false, shift: false }); 
       });
     }
     else {
-      log(0, 'Unrecognized command, type `help`, `help <command>` or `.help` for help');
+      //
+      // say something helpful if the user entered garbage input.
+      //
+      log(0, 'Type `help` for all commands or `help <command>`.\r\n');
     }
 
     repl.repl.displayPrompt();
@@ -76,7 +101,7 @@ var replHandler = function replHandler(config) {
 
 var cliHandler = function cliHandler(config) {
 
-  var command = argv._.splice(0, 1); // splice out the first item.
+  var command = argv._.splice(0, 1)[0]; // splice out the first item.
 
   //
   // if the user wants help on a particular command.
@@ -102,6 +127,7 @@ var handler = process.argv.length === 2 ? replHandler : cliHandler;
 //
 deploytool.git.init(function(err) {
 
+
   if (err) {
 
     throw err;
@@ -118,8 +144,9 @@ deploytool.git.init(function(err) {
       }
 
       var user = deploytool.git.getUserIdentity(data);
-      log(0, 'Logged in as', user.name, '(' + user.id + ')');
 
+      log(0, 'Logged in as ' + user.name + ' (' + user.id + ')\n');
+      
       handler(data);
     });
   }
