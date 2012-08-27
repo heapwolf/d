@@ -13,10 +13,13 @@ var deploytool = require('../lib/deploytool'),
 
 var pathname = __dirname + '/../lib/commands';
 
-var commands = deploytool.commands = {};
-var shortlist = [];
-var longlist = {};
-var namemargin = 0;
+deploytool.commands = {
+  raw: {},
+  shortlist: [],
+  longlist: {}
+};
+
+var commands = deploytool.commands.raw;
 
 var log = common.log;
 var pkg;
@@ -41,6 +44,9 @@ catch(ex) {
 //
 fs.readdirSync(pathname).forEach(function (name) {
 
+  var shortlist = deploytool.commands.shortlist;
+  var longlist = deploytool.commands.longlist;
+
   //
   // get the code for each command and pull it in for use.
   //
@@ -56,16 +62,25 @@ fs.readdirSync(pathname).forEach(function (name) {
   // get the help information out of the commands and
   // make it look nice and presentable for reading.
   //
-  var usagelength, namelength;
+  var namelength, namemargin = 0;
   var maxwidth = process.stdout.getWindowSize()[0];
 
   for(var command in commands) {
 
     shortlist.push(command);
 
+    var usage = commands[command].usage;
+    var args = [], argdescriptions = [];
+    
+    for(var arg in usage) {
+      args.push(arg);
+      argdescriptions.push(arg + ' ' + usage[arg]);
+    }
+
     longlist[command] = [
       command,
-      commands[command].usage,
+      args.join(' '),
+      argdescriptions.join('\r\n  '),
       commands[command].description.join('\r\n')
     ];
 
@@ -96,6 +111,8 @@ fs.readdirSync(pathname).forEach(function (name) {
 //
 var replHandler = function replHandler(config) {
 
+  var shortlist = deploytool.commands.shortlist;
+
   function completer(line) {
 
     //
@@ -124,15 +141,9 @@ var replHandler = function replHandler(config) {
 
   rl.on('line', function(line) {
 
-    var help = /help\s*(.*?)?$/;
-    var helpMatch = help.exec(line.trim());
-
     var args = line.trim().split(' ');
     var command = args.splice(0, 1)[0];
 
-    if (helpMatch) {
-      printHelp(helpMatch[1]);
-    }
     if (command === 'exit') {
       process.exit(0);
     }
@@ -156,14 +167,13 @@ var cliHandler = function cliHandler(config) {
 
   var command = argv._.splice(0, 1)[0]; // splice out the first item.
 
-  //
-  // if the user wants help on a particular command.
-  //
-  if (argv.h || argv.help || command === 'help') {
+  if (argv.h || argv.help) {
 
-    printMessage(argv._[0]); // the new first item of the array.
+    command = 'help' // the new first item of the array.
+    argv._ = [argv.h || argv.help];
   }
-  else if (commands[command]) {
+
+  if (commands[command]) {
 
     //
     // pass in the arguments that the user wants to send to
@@ -202,7 +212,7 @@ deploytool.git.init(function(err) {
       var user = deploytool.git.getUserIdentity(data);
  
       deploytool.git.whoami = function() {
-        log(0, 'Logged in as ' + user.name + ' (' + user.id + ')\n');
+        log(0, 'User identified as ' + user.name + ' (' + user.id + ')\n');
       };
       
       deploytool.git.whoami();
@@ -211,25 +221,4 @@ deploytool.git.init(function(err) {
   }
 });
 
-var printHelp = function printHelp(command) {
-
-  if (command && longlist[command]) {
-
-    //
-    // if a second argument was provided, print its help and usage.
-    //
-    log(-1, longlist[command].join(' '));
-  }
-  else {
-
-    //
-    // print all of the usage for each command
-    //
-    log(-1, '\nHelp'.underline + '\r\nFor more detailed help, use `help <command>`.\n');
-
-    for (var command in longlist) {
-      log(-1, longlist[command][0] + ' ' + longlist[command][2]);
-    }
-  }
-};
 
