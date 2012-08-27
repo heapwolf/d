@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 var deploytool = require('../lib/deploytool'),
-    repl = require('repl'),
+    readline = require('readline'),
     fs = require('fs'),
     path = require('path'),
     ansi = require('ansi'),
@@ -14,6 +14,10 @@ var deploytool = require('../lib/deploytool'),
 var pathname = __dirname + '/../lib/commands';
 
 var commands = deploytool.commands = {};
+var shortlist = [];
+var longlist = {};
+var namemargin = 0;
+
 var log = common.log;
 var pkg;
 
@@ -37,12 +41,52 @@ catch(ex) {
 //
 fs.readdirSync(pathname).forEach(function (name) {
 
+  //
+  // get the code for each command and pull it in for use.
+  //
   if (path.extname(name) === '.js') {
 
     var basename = path.basename(name, '.js');
     var rawfile = path.join(pathname, basename);
 
     commands[basename] = require(rawfile);
+  }
+
+  //
+  // get the help information out of the commands and
+  // make it look nice and presentable for reading.
+  //
+  var usagelength, namelength;
+  var maxwidth = process.stdout.getWindowSize()[0];
+
+  for(var command in commands) {
+
+    shortlist.push(command);
+
+    longlist[command] = [
+      command,
+      commands[command].usage,
+      commands[command].description.join('\r\n')
+    ];
+
+    namelength = command.length;
+
+    if (namelength > namemargin) {
+      namemargin = namelength;
+    }
+  }
+
+  for(var command in longlist) {
+
+    namelength = command.length;
+
+    var difference = namemargin - namelength;
+
+    if (difference > 0) {
+      for(var i = 0, d = difference; i < d; i++) {
+        longlist[command][0] += ' ';
+      }
+    }
   }
 });
 
@@ -52,51 +96,60 @@ fs.readdirSync(pathname).forEach(function (name) {
 //
 var replHandler = function replHandler(config) {
 
-  var prompt = pkg.name + ' ' + pkg.version + '>';
-  
-  //
-  // create a repl that will process input and run the appropriate commands.
-  //
-  var rpl = repl.start(prompt, null, function evil(cmd, r, name, fn) {
+  function completer(line) {
 
     //
-    // the repl will give us the contents of the line as a string we can split.
+    // calculate the matches from the shortlist.
     //
-    var args = cmd.replace(/^\(|\)$/g, '').replace('\n', '').split(' ');
-    
+    var hits = shortlist.filter(function(c) {
+      return c.indexOf(line) === 0;
+    });
+
     //
-    // the first arg will be the command to execute.
+    // show all completions if none found
     //
+    return [hits.length ? hits : shortlist, line]
+  }
+
+  var opts = {
+    completer: completer,
+    input: process.stdin,
+    output: process.stdout
+  };
+
+  var rl = readline.createInterface(opts);
+
+  rl.setPrompt('>');
+  rl.prompt();
+
+  rl.on('line', function(line) {
+
+    var help = /help\s*(.*?)?$/;
+    var helpMatch = help.exec(line.trim());
+
+    var args = line.trim().split(' ');
     var command = args.splice(0, 1)[0];
 
-    if (command === '') {
-      // do nothing. 
+    if (helpMatch) {
+      printHelp(helpMatch[1]);
     }
-    else if (command === 'help') {
-      printMessage(args[0]);
-    }
-    else if (command === 'exit' || command === 'quit') {
+    if (command === 'exit') {
       process.exit(0);
     }
-    else if (commands[command] && commands[command].command) {
-      
-      //
-      // attempt to execute a command that appears to exist.
-      //
+    else if (commands[command]) {
       commands[command].command.call(deploytool, args, config, function() {
-        process.stdin.emit('keypress', '\r', { name: 'enter', ctrl: false, meta: false, shift: false }); 
+        process.stdin.emit('keypress', '\r\n', { name: 'enter' }); 
       });
     }
-    else {
-      //
-      // say something helpful if the user entered garbage input.
-      //
-      log(0, 'Type `help` for all commands or `help <command>`.\r\n');
-    }
 
-    repl.repl.displayPrompt();
+    rl.prompt();
+
+  }).on('close', function() {
+    
+    console.log('Have a great day!');
+    process.exit(0);
   });
- 
+
 };
 
 var cliHandler = function cliHandler(config) {
@@ -116,7 +169,11 @@ var cliHandler = function cliHandler(config) {
     // pass in the arguments that the user wants to send to
     // the command as well as the configuration for this repo.
     //
-    commands[command].command.call(deploytool, argv._, config);
+    commands[command].command.call(deploytool, argv._, config, function() {
+      console.log(deploytool.api.config);
+      console.log('\r\n');
+      process.stdin.emit('keypress', '\r\n', { name: 'enter' }); 
+    });
   }
 };
 
@@ -126,7 +183,6 @@ var handler = process.argv.length === 2 ? replHandler : cliHandler;
 // ensure we have a git repository, if we don't, initalize one.
 //
 deploytool.git.init(function(err) {
-
 
   if (err) {
 
@@ -144,40 +200,36 @@ deploytool.git.init(function(err) {
       }
 
       var user = deploytool.git.getUserIdentity(data);
-
-      log(0, 'Logged in as ' + user.name + ' (' + user.id + ')\n');
+ 
+      deploytool.git.whoami = function() {
+        log(0, 'Logged in as ' + user.name + ' (' + user.id + ')\n');
+      };
       
+      deploytool.git.whoami();
       handler(data);
     });
   }
 });
 
-var printMessage = function printMessage(command) {
+var printHelp = function printHelp(command) {
 
-  if (command && commands[command]) {
+  if (command && longlist[command]) {
 
     //
     // if a second argument was provided, print its help and usage.
     //
-    log(-1, '\n' + commands[command].help.join('\n') + '\n'); 
-    log(-1, 'Usage: ' + commands[command].usage.join('\n') + '\n');
+    log(-1, longlist[command].join(' '));
   }
   else {
 
     //
     // print all of the usage for each command
     //
-    log(-1, '\nHelp'.underline + '\n');
+    log(-1, '\nHelp'.underline + '\r\nFor more detailed help, use `help <command>`.\n');
 
-    for (var command in commands) {
-      if (commands[command].usage) {
-        log(-1, commands[command].usage.join('\n'));
-      }
+    for (var command in longlist) {
+      log(-1, longlist[command][0] + ' ' + longlist[command][2]);
     }
-    log(-1, '\n');
   }
 };
 
-process.on('exit', function() {
-  log(-1, '\n');
-});
