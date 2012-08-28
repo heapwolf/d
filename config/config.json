@@ -1,14 +1,32 @@
 {
   "api": {
     "hosts": [
-      { "protocol": "http", "address": "64.27.57.99", "port": 8001, "status": 200 },
-      { "protocol": "http", "address": "127.0.0.1", "port": 8001, "status": 200 },
-      { "protocol": "http", "address": "127.0.0.1", "port": 8002, "status": 200 },
-      { "protocol": "http", "address": "127.0.0.1", "port": 8003, "status": 200 }
+      {
+        "protocol": "http",
+        "address": "64.27.57.99",
+        "port": 8001,
+        "status": 200
+      },
+      {
+        "protocol": "http",
+        "address": "127.0.0.1",
+        "port": 8001,
+        "status": 200
+      },
+      {
+        "protocol": "http",
+        "address": "127.0.0.1",
+        "port": 8002,
+        "status": 200
+      },
+      {
+        "protocol": "http",
+        "address": "127.0.0.1",
+        "port": 8003,
+        "status": 200
+      }
     ],
-    "index": 0
+    "index": 1
   },
-  "git": {
-    
-  }
+  "git": {}
 }
