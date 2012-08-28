@@ -10,15 +10,6 @@ var deploytool = require('../lib/deploytool'),
     common = require('../lib/common'),
     asni = require('ansi')(process.stdout);
 
-
-var pathname = __dirname + '/../lib/commands';
-
-deploytool.commands = {
-  raw: {},
-  shortlist: [],
-  longlist: {}
-};
-
 var shortlist = deploytool.commands.shortlist;
 var longlist = deploytool.commands.longlist;
 var commands = deploytool.commands.raw;
@@ -38,25 +29,6 @@ catch(ex) {
   
   log(1, 'No package.json file found in this directory\r\n');
 }
-
-//
-// get all of the commands from the commands directory,
-// require them so they can be used with the REPL or via
-// arguments that are provided from the command line.
-//
-fs.readdirSync(pathname).forEach(function (name) {
-
-  //
-  // get the code for each command and pull it in for use.
-  //
-  if (path.extname(name) === '.js') {
-
-    var basename = path.basename(name, '.js');
-    var rawfile = path.join(pathname, basename);
-
-    commands[basename] = require(rawfile);
-  }
-});
 
 //
 // get the help information out of the commands and
@@ -86,6 +58,10 @@ for (var command in commands) {
     argdescriptions.push(arg + ' ' + usage[arg]);
   }
 
+  //
+  // an array of doctored strings use by the help
+  // printer.
+  //
   longlist[command] = [
     command,
     commands[command].description.join('\r\n'),
