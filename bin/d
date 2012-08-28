@@ -19,6 +19,8 @@ deploytool.commands = {
   longlist: {}
 };
 
+var shortlist = deploytool.commands.shortlist;
+var longlist = deploytool.commands.longlist;
 var commands = deploytool.commands.raw;
 var aliases = {};
 
@@ -44,9 +46,6 @@ catch(ex) {
 //
 fs.readdirSync(pathname).forEach(function (name) {
 
-  var shortlist = deploytool.commands.shortlist;
-  var longlist = deploytool.commands.longlist;
-
   //
   // get the code for each command and pull it in for use.
   //
@@ -57,63 +56,63 @@ fs.readdirSync(pathname).forEach(function (name) {
 
     commands[basename] = require(rawfile);
   }
-
-  //
-  // get the help information out of the commands and
-  // make it look nice and presentable for reading.
-  //
-  var namelength, namemargin = 0;
-  var maxwidth = process.stdout.getWindowSize()[0];
-
-  for (var command in commands) {
-
-    shortlist.push(command);
-
-    var usage = commands[command].usage;
-    var args = [], argdescriptions = [];
-
-    var alias = commands[command].alias;
-
-    if (alias) {
-
-      for (var i = 0, l = alias.length; i < l; i++) {
-        aliases[alias[i]] = commands[command];
-      }
-    }   
-
-    for (var arg in usage) {
-      args.push(arg);
-      argdescriptions.push(arg + ' ' + usage[arg]);
-    }
-
-    longlist[command] = [
-      command,
-      commands[command].description.join('\r\n'),
-      args.join(' '),
-      argdescriptions.join('\r\n  '),
-      alias ? alias.join() : ''
-    ];
-
-    namelength = command.length;
-
-    if (namelength > namemargin) {
-      namemargin = namelength;
-    }
-  }
-
-  for (var command in longlist) {
-
-    namelength = command.length;
-
-    var difference = namemargin - namelength;
-
-    if (difference > 0) {
-      for (var i = 0, d = difference; i < d; i++) {
-        longlist[command][0] += ' ';
-      }
-    }
-  }
 });
+
+//
+// get the help information out of the commands and
+// make it look nice and presentable for reading.
+//
+var namelength, namemargin = 0;
+var maxwidth = process.stdout.getWindowSize()[0];
+
+for (var command in commands) {
+
+  shortlist.push(command);
+
+  var usage = commands[command].usage;
+  var args = [], argdescriptions = [];
+
+  var alias = commands[command].alias;
+
+  if (alias) {
+
+    for (var i = 0, l = alias.length; i < l; i++) {
+      aliases[alias[i]] = commands[command];
+    }
+  }   
+
+  for (var arg in usage) {
+    args.push(arg);
+    argdescriptions.push(arg + ' ' + usage[arg]);
+  }
+
+  longlist[command] = [
+    command,
+    commands[command].description.join('\r\n'),
+    args.join(' '),
+    argdescriptions.join('\r\n  '),
+    alias ? alias.join() : ''
+  ];
+
+  namelength = command.length;
+
+  if (namelength > namemargin) {
+    namemargin = namelength;
+  }
+}
+
+for (var command in longlist) {
+
+  namelength = command.length;
+
+  var difference = namemargin - namelength;
+
+  if (difference > 0) {
+    for (var i = 0, d = difference; i < d; i++) {
+      longlist[command][0] += ' ';
+    }
+  }
+}
 
 //
 // if there are no arguments provided at the commandline
@@ -121,6 +120,8 @@ fs.readdirSync(pathname).forEach(function (name) {
 //
 var replHandler = function replHandler(config) {
 
+  deploytool.mode = 'REPL';
+  
   var shortlist = deploytool.commands.shortlist;
 
   function completer(line) {
@@ -173,6 +174,8 @@ var replHandler = function replHandler(config) {
 };
 
 var cliHandler = function cliHandler(config) {
+
+  deploytool.mode = 'CLI';
 
   var name = argv._.splice(0, 1)[0]; // splice out the first item.
 
