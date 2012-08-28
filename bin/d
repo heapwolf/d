@@ -156,7 +156,7 @@ var replHandler = function replHandler(config) {
     var name = args.splice(0, 1)[0];
     var container = commands[name] || aliases[name];
 
-    if (name === 'exit') {
+    if (name === 'exit' || name === 'quit' || name === 'q') {
       process.exit(0);
     }
     else if (container) {
