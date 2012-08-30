@@ -2,7 +2,7 @@
   "name": "d",
   "description": "A Generic deployment tool for nodejs",
   "author": "Paolo Fragomeni <paolo@async.ly>",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "contributors": [
     { "name": "Paolo Fragomeni", "email": "paolo@async.ly" }
   ],
