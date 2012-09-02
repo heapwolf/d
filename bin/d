@@ -140,6 +140,9 @@ var replHandler = function replHandler(config) {
         process.stdin.emit('keypress', '\r\n', { name: 'enter' }); 
       });
     }
+    else {
+      log(-1, 'Unknown command');
+    }
 
     rl.prompt();
 
