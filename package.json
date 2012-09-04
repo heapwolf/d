@@ -15,17 +15,20 @@
   ],
   "repository": {
     "type": "git",
-    "url": "http://github.com/hij1nx/push.git" 
+    "url": "http://github.com/hij1nx/d.git" 
   },
   "dependencies": {
     "optimist": "*",
-    "ansi": "*",
+    "semver": "1.0.x",
+    "nano": "*",
     "colors": "*"
   },
   "bin": {
-    "./bin/d"
+    "d": "./bin/d"
   },
   "main": "./lib/deploytool",
-  "engines": { "node": ">= 0.9.0" }
+  "engines": { 
+    "node": ">= 0.9.0" 
+  }
 }
 

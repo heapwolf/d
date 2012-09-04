@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
-var deploytool = require('../lib/deploytool'),
-    readline = require('readline'),
-    fs = require('fs'),
-    path = require('path'),
-    ansi = require('ansi'),
-    argv = require('optimist').argv,
-    dpkg = require('../package.json'),
-    common = require('../lib/common'),
-    asni = require('ansi')(process.stdout);
+var deploytool = require('../lib/deploytool');
+var readline = require('readline');
+var fs = require('fs');
+var path = require('path');
+var ansi = require('ansi');
+var argv = require('optimist').argv;
+var dpkg = require('../package.json');
+var common = require('../lib/common');
+var asni = require('ansi')(process.stdout);
 
 var shortlist = deploytool.commands.shortlist;
 var longlist = deploytool.commands.longlist;

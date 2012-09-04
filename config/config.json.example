@@ -28,5 +28,12 @@
     ],
     "index": 1
   },
-  "git": {}
-}
+  "git": {
+  },
+  "update": {
+    "url": "http://registry.npmjs.org/d/latest",
+    "enabled": true,
+    "last": null
+  },
+  "lastrun": null
+l
