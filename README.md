@@ -4,18 +4,24 @@ deploytool
 # Abstract
 A generic deploy tool for #node.js
 
+# Motivation
+ - A platform as a service must distribute the concerns of connectivity. A deployment tool should cycle 
+through a cache of connection options N times in case of failure. 
+ - A deployment tool should communicate with a deployment proxy, not a core API. The deploy proxy should 
+distribute the code it receives to the appropriate target machines.
+ - Deployments should be transactional, meaning that if any one step during the process fails, nothing is
+affected on the target machine.
+
 # Features
-- Uses git to manage versioning
+- Uses git to manage deployment versioning
 - Binary differential deployments (only deploy your changes)
 - An interactive REPL mode
 - API agnostic
 - Uses directory context (similar to npm)
+- Extremely readable plugin architecture
 
 ## go into interactive mode (REPL)
 `d`
-
-## login or out from the api server of which you will push to
-`d login`, `d logout`
 
 ## Push code from the local directory or a remote as a new or existing app
 `d push [remote]`
