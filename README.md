@@ -23,6 +23,7 @@ affected on the target machine.
 
 ## go into interactive mode (REPL)
 `d`
+Running this program without any parameters  
 
 ## Push code from the local directory or a remote as a new or existing app
 `d push [remote]`
@@ -33,7 +34,7 @@ affected on the target machine.
 ## Pull specific version of code from an existing app
 `d pull <version>`
 
-## Stop, Restart or Start [optionaly start a specific version (sha1 hash or tag)]
+## Stop, Restart or Start [optionally start a specific version (sha1 hash or tag)]
 `d start [version] [all]`,
 `d stop [all]`,
 `d restart`
@@ -64,9 +65,11 @@ affected on the target machine.
 ### Delete environment variable for an app
 `d env <name> -d`
 
-## Show logs for an app
-`d logs`
+## Application logs
 
-## Display the current version (of push)
-`d --version`
+__**Commands**__
+`d logs`, `logs` 
+
+__**Description**__
+Application logging comes in two flavors. When running this program in interactive mode, you will have real-time logs over tcp. When this program is not running in interactive mode, you will see only a historic view. This historic view is updated when possible and does not represent the most current activity of the application.
 
