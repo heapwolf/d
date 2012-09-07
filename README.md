@@ -22,11 +22,14 @@ affected on the target machine.
 - Extremely readable plugin architecture
 
 ## go into interactive mode (REPL)
-`d`
-Running this program without any parameters  
+__**Commands**__ `d`
+
+__**Description**__ Running this program without any parameters will cause it to go into interactive mode, a mode similar to the Node.js REPL. Because the program will remain running, it is possible to establish long lived connections to the deployment targets; this allows for interactive debugging.
 
 ## Push code from the local directory or a remote as a new or existing app
-`d push [remote]`
+__**Commands**__ `d push [remote]`, `push`
+
+__**Description**__ Attempt to push the code in the current project to the deployment target(s). You may optionally specify a remote for the code push.
 
 ## Pull code from an existing app
 `d pull`
@@ -67,9 +70,7 @@ Running this program without any parameters
 
 ## Application logs
 
-__**Commands**__
-`d logs`, `logs` 
+__**Commands**__ `d logs`, `logs` 
 
-__**Description**__
-Application logging comes in two flavors. When running this program in interactive mode, you will have real-time logs over tcp. When this program is not running in interactive mode, you will see only a historic view. This historic view is updated when possible and does not represent the most current activity of the application.
+__**Description**__ Application logging comes in two flavors. When running this program in interactive mode, you will have real-time logs over tcp. When this program is not running in interactive mode, you will see only a historic view. This historic view is updated when possible and does not represent the most current activity of the application.
 
