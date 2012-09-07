@@ -4,7 +4,6 @@ var deploytool = require('../lib/deploytool');
 var readline = require('readline');
 var fs = require('fs');
 var path = require('path');
-var ansi = require('ansi');
 var argv = require('optimist').argv;
 var dpkg = require('../package.json');
 var common = require('../lib/common');
@@ -35,6 +34,11 @@ catch(ex) {
 // make it look nice and presentable for reading.
 //
 var namelength, namemargin = 0;
+
+//
+// this is not yet used, but it could be used if
+// we want to control the width of the description.
+//
 var maxwidth = process.stdout.getWindowSize()[0];
 
 for (var command in commands) {
