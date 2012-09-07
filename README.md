@@ -11,6 +11,7 @@ through a cache of connection options N times in case of failure.
 distribute the code it receives to the appropriate target machines.
  - Deployments should be transactional, meaning that if any one step during the process fails, nothing is
 affected on the target machine.
+ - You're already taking `libuv` as a dependency, why not take `git`.
 
 # Features
 - Uses git to manage deployment versioning
