@@ -21,7 +21,7 @@ affected on the target machine.
  - Uses directory context (similar to npm)
  - Extremely readable plugin architecture
 
-## go into interactive mode (REPL)
+## Interactive mode (REPL)
 __**Commands**__ `d`
 
 __**Description**__ Running this program without any parameters will cause it to go into interactive mode, a mode similar to the Node.js REPL. Because the program will remain running, it is possible to establish long lived connections to the deployment targets; this allows for interactive debugging.
@@ -36,7 +36,7 @@ __**Commands**__ `d pull [sha1|tag]`, `pull [sha1|tag]`
 
 __**Description**__ Pull the latest code from for the app. If no version is specified it will pull the latest. If a version is specified, it can be either the sha1 hash for a particular commit or a git tag.
 
-## Stop, Restart or Start 
+## Stop, Restart or Start an app
 __**Commands**__ `d start [version]`, `d stop [all]`, `d restart`
 
 __**Description**__ Send the application a start, stop or restart signal. These commands are short hand for `d sig start`, `d sig stop` and `d sig restart`. 
@@ -50,14 +50,15 @@ __**Commands**__ `d sig <signal>`, `sig <signal>`
 
 __**Description**__ Send an arbitrary signal to an application.
 
-## Get info for the deployed app, status, number of drones, uptime, etc.
+## Get info for the deployed app
 __**Commands**__ `d info`, `info`
 
-## View the package.json of the deployed app
-__**Commands**__ `d view`, `view`
+__**Description**__ Get information such as the current status of the application, number of drones, uptime, etc.
 
 ## List all deployed applications
 __**Commands**__ `d list`, `list`
+
+__**Description**__ List all of the applications that you have currently deployed.
 
 ## Environment variables
 __**Commands**__ `d env [name] [value]`, `env [name] [value]`
