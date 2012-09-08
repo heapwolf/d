@@ -1,6 +1,3 @@
-deploytool
-==========
-
 # Abstract
 A generic deploy tool for #node.js
 
@@ -51,14 +48,16 @@ __**Commands**__ `d sig <signal>`, `sig <signal>`
 __**Description**__ Send an arbitrary signal to an application.
 
 ## Get info for the deployed app
-__**Commands**__ `d info`, `info`
+__**Commands**__ `d info [name]`, `info [name]`
 
-__**Description**__ Get information such as the current status of the application, number of drones, uptime, etc.
+__**Description**__ Get information such as the current status of the app, number of drones, uptime, etc.
 
-## List all deployed applications
-__**Commands**__ `d list`, `list`
+ - To get the info for another app, specify the name of the app. For example: `d info hello-world`.
 
-__**Description**__ List all of the applications that you have currently deployed.
+## Catalog of all deployed applications
+__**Commands**__ `d cat`, `cat`
+
+__**Description**__ Show a catalog of all of the applications that you have currently deployed.
 
 ## Environment variables
 __**Commands**__ `d env [name] [value]`, `env [name] [value]`
