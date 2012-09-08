@@ -11,15 +11,15 @@ through a cache of connection options N times in case of failure.
 distribute the code it receives to the appropriate target machines.
  - Deployments should be transactional, meaning that if any one step during the process fails, nothing is
 affected on the target machine.
- - You're already taking `libuv` as a dependency, why not take `git`.
+ - With Node.js you're taking `libuv` as a dependency, `git` isn't any more significant.
 
 # Features
-- Uses git to manage deployment versioning
-- Binary differential deployments (only deploy your changes)
-- An interactive REPL mode
-- API endpoint agnostic
-- Uses directory context (similar to npm)
-- Extremely readable plugin architecture
+ - Uses git to manage deployment versioning
+ - Binary differential deployments (only deploy your changes)
+ - An interactive REPL mode
+ - API endpoint agnostic
+ - Uses directory context (similar to npm)
+ - Extremely readable plugin architecture
 
 ## go into interactive mode (REPL)
 __**Commands**__ `d`
@@ -32,41 +32,43 @@ __**Commands**__ `d push [remote]`, `push`
 __**Description**__ Attempt to push the code in the current project to the deployment target(s). You may optionally specify a remote for the code push.
 
 ## Pull code from an existing app
-`d pull`
+__**Commands**__ `d pull [sha1|tag]`, `pull [sha1|tag]`
 
-## Pull specific version of code from an existing app
-`d pull <version>`
+__**Description**__ Pull the latest code from for the app. If no version is specified it will pull the latest. If a version is specified, it can be either the sha1 hash for a particular commit or a git tag.
 
 ## Stop, Restart or Start [optionally start a specific version (sha1 hash or tag)]
-`d start [version] [all]`,
-`d stop [all]`,
-`d restart`
+__**Commands**__ `d start [version] [all]`, `d stop [all]`, `d restart`
+
+__**Description**__ Send the application a start, stop or restart signal. These commands are short hand for `d sig start`, `d sig stop` and `d sig restart`.
+
+## Signal an app
+__**Commands**__ `d sig <signal>`, `sig <signal>`
+
+__**Description**__ Send an arbitrary signal to an application.
 
 ## Get info for the deployed app, status, number of drones, uptime, etc.
-`d info`
+__**Commands**__ `d info`, `info`
 
 ## View the package.json of the deployed app
-`d view`
+__**Commands**__ `d view`, `view`
 
 ## List all deployed applications
-`d list`
+__**Commands**__ `d list`, `list`
 
 ## Environment variables
+__**Commands**__ `d env [name] [value]`, `env [name] [value]`
 
-### Set environment variable for an app
-`d env <name> <value>`
+__**Description**__ Environment variables are settings that are applied to the shell environment when a deployment is made. This command will get, set, clear and delete environmental variables. 
 
-### Get environment variables for an app
-`d env`,
+ - To get all of the variables, omit `name` and `value` and all of the currently set variables will be returned. If `--json` or `-j` is specified, all of the results will be returned as raw `JSON` format.
 
-### Get a single environment variable from an app
-`d env <name>`
+ - To set a variable, supply both the `name` and the `value`. If a value contains whitespace, remember to quote it.
 
-### Clear an environment variable for an app
-`d env <name> -c`
+ - To get a variable, supply only the `name` of the variable. This will print only the name and value of that variable.
 
-### Delete environment variable for an app
-`d env <name> -d`
+ - To clear an environment variable for an app, supply only the `name` of the variable and specify `-c`. For example: `d env <name> -c`.
+
+ - To delete environment variable for an app, supply only the `name` of the variable and specify `-d`. For example: `d env <name> -d`.
 
 ## Application logs
 
