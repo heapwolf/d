@@ -1,4 +1,4 @@
-# Abstract
+# Synopsis
 A generic deploy tool for #node.js
 
 # Motivation
