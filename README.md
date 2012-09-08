@@ -26,20 +26,24 @@ __**Commands**__ `d`
 
 __**Description**__ Running this program without any parameters will cause it to go into interactive mode, a mode similar to the Node.js REPL. Because the program will remain running, it is possible to establish long lived connections to the deployment targets; this allows for interactive debugging.
 
-## Push code from the local directory or a remote as a new or existing app
+## Push code to the cloud
 __**Commands**__ `d push [remote]`, `push`
 
 __**Description**__ Attempt to push the code in the current project to the deployment target(s). You may optionally specify a remote for the code push.
 
-## Pull code from an existing app
+## Pull code from the cloud
 __**Commands**__ `d pull [sha1|tag]`, `pull [sha1|tag]`
 
 __**Description**__ Pull the latest code from for the app. If no version is specified it will pull the latest. If a version is specified, it can be either the sha1 hash for a particular commit or a git tag.
 
-## Stop, Restart or Start [optionally start a specific version (sha1 hash or tag)]
-__**Commands**__ `d start [version] [all]`, `d stop [all]`, `d restart`
+## Stop, Restart or Start 
+__**Commands**__ `d start [version]`, `d stop [all]`, `d restart`
 
-__**Description**__ Send the application a start, stop or restart signal. These commands are short hand for `d sig start`, `d sig stop` and `d sig restart`.
+__**Description**__ Send the application a start, stop or restart signal. These commands are short hand for `d sig start`, `d sig stop` and `d sig restart`. 
+
+ - To specify a version of your app to start, supply the git `sha1` hash or `tag`.
+
+ - To stop all of the apps that you have deployed, specify `all` in addition to `stop`.
 
 ## Signal an app
 __**Commands**__ `d sig <signal>`, `sig <signal>`
