@@ -11,19 +11,19 @@
         "protocol": "http",
         "address": "127.0.0.1",
         "port": 8001,
-        "responsive": true
+        "responsive": false
       },
       {
         "protocol": "http",
         "address": "127.0.0.1",
         "port": 8002,
-        "responsive": true
+        "responsive": false
       },
       {
         "protocol": "http",
         "address": "127.0.0.1",
         "port": 8003,
-        "responsive": true
+        "responsive": false
       }
     ],
     "index": 1
