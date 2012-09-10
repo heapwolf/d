@@ -20,14 +20,7 @@ var pkg;
 log(0, 'deploytool v' + dpkg.version);
 log(0, 'node ' + process.version);
 
-try {
-
-  pkg = require(process.cwd() + '/package.json');
-}
-catch(ex) {
-  
-  log(1, 'No package.json file found in this directory\r\n');
-}
+common.hasPackage();
 
 //
 // get the help information out of the commands and

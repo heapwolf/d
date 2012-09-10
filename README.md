@@ -18,6 +18,8 @@ affected on the target machine.
  - Uses directory context (similar to npm)
  - Extremely readable plugin architecture
 
+# Usage
+
 ## Interactive mode (REPL)
 __**Commands**__ `d`
 
@@ -33,7 +35,7 @@ __**Commands**__ `d pull [sha1|tag]`, `pull [sha1|tag]`
 
 __**Description**__ Pull the latest code from for the app. If no version is specified it will pull the latest. If a version is specified, it can be either the sha1 hash for a particular commit or a git tag.
 
-## Stop, Restart or Start an app
+## Stop, Restart or Start code
 __**Commands**__ `d start [version]`, `d stop [all]`, `d restart`
 
 __**Description**__ Send the application a start, stop or restart signal. These commands are short hand for `d sig start`, `d sig stop` and `d sig restart`. 
@@ -42,19 +44,19 @@ __**Description**__ Send the application a start, stop or restart signal. These 
 
  - To stop all of the apps that you have deployed, specify `all` in addition to `stop`.
 
-## Signal an app
+## Send an arbitrary signal to the running code
 __**Commands**__ `d sig <signal>`, `sig <signal>`
 
 __**Description**__ Send an arbitrary signal to an application.
 
-## Get info for the deployed app
+## Get info for the deployed code
 __**Commands**__ `d info [name]`, `info [name]`
 
-__**Description**__ Get information such as the current status of the app, number of drones, uptime, etc.
+__**Description**__ Get information such as the current status of the code, number of network resources it is using, uptime, etc.
 
- - To get the info for another app, specify the name of the app. For example: `d info hello-world`.
+ - To get the info for another project, specify the name of the project. For example: `d info hello-world`.
 
-## Catalog of all deployed applications
+## Catalog of all deployed code
 __**Commands**__ `d cat`, `cat`
 
 __**Description**__ Show a catalog of all of the applications that you have currently deployed.
@@ -74,7 +76,7 @@ __**Description**__ Environment variables are settings that are applied to the s
 
  - To delete environment variable for an app, supply only the `name` of the variable and specify `-d`. For example: `d env <name> -d`.
 
-## Application logs
+## Logs
 
 __**Commands**__ `d logs`, `logs` 
 
