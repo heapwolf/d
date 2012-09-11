@@ -1,6 +1,6 @@
 {
   "name": "d",
-  "description": "A Generic deployment tool for nodejs",
+  "description": "A generic deployment tool for nodejs",
   "author": "Paolo Fragomeni <paolo@nodejitsu.com>",
   "version": "0.0.6",
   "contributors": [
@@ -26,7 +26,7 @@
   "bin": {
     "d": "./bin/d"
   },
-  "main": "./lib/deploytool",
+  "main": "./lib/index",
   "engines": { 
     "node": ">= 0.9.0" 
   }

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var deploytool = require('../lib/deploytool');
+var lib = require('../lib');
 var readline = require('readline');
 var fs = require('fs');
 var path = require('path');
@@ -9,15 +9,15 @@ var dpkg = require('../package.json');
 var common = require('../lib/common');
 var asni = require('ansi')(process.stdout);
 
-var shortlist = deploytool.commands.shortlist;
-var longlist = deploytool.commands.longlist;
-var commands = deploytool.commands.raw;
+var shortlist = lib.commands.shortlist;
+var longlist = lib.commands.longlist;
+var commands = lib.commands.raw;
 var aliases = {};
 
 var log = common.log;
 var pkg;
 
-log(0, 'deploytool v' + dpkg.version);
+log(0, dpkg.name + ' v' + dpkg.version);
 log(0, 'node ' + process.version);
 
 common.hasPackage();
@@ -93,9 +93,9 @@ for (var command in longlist) {
 //
 var replHandler = function replHandler(config) {
 
-  deploytool.mode = 'REPL';
+  lib.mode = 'REPL';
   
-  var shortlist = deploytool.commands.shortlist;
+  var shortlist = lib.commands.shortlist;
 
   function completer(line) {
 
@@ -133,7 +133,7 @@ var replHandler = function replHandler(config) {
       process.exit(0);
     }
     else if (container) {
-      container.command.call(deploytool, args, config, function() {
+      container.command.call(lib, args, config, function() {
         process.stdin.emit('keypress', '\r\n', { name: 'enter' }); 
       });
     }
@@ -151,7 +151,7 @@ var replHandler = function replHandler(config) {
 
 var cliHandler = function cliHandler(config) {
 
-  deploytool.mode = 'CLI';
+  lib.mode = 'CLI';
 
   var name = argv._.splice(0, 1)[0]; // splice out the first item.
 
@@ -169,7 +169,7 @@ var cliHandler = function cliHandler(config) {
     // pass in the arguments that the user wants to send to
     // the command as well as the configuration for this repo.
     //
-    container.command.call(deploytool, argv._, config, function() {
+    container.command.call(lib, argv._, config, function() {
       console.log('\r\n');
       process.stdin.emit('keypress', '\r\n', { name: 'enter' }); 
     });
@@ -181,7 +181,7 @@ var handler = process.argv.length === 2 ? replHandler : cliHandler;
 //
 // ensure we have a git repository, if we don't, initalize one.
 //
-deploytool.git.startup(function(err) {
+lib.git.startup(function(err) {
 
   if (err) {
 
@@ -192,22 +192,22 @@ deploytool.git.startup(function(err) {
     //
     // get the information about the repo.
     //
-    deploytool.git.repoInfo(function(err, config) {
+    lib.git.repoInfo(function(err, config) {
 
       if (err) {
         throw err;
       }
 
-      var user = deploytool.git.getUserIdentity(config);
+      var user = lib.git.getUserIdentity(config);
  
       //
       // generate the whoami command.
       //
-      deploytool.git.whoami = function() {
+      lib.git.whoami = function() {
         log(0, 'User identified as ' + user.name + ' (' + user.id + ')\n');
       };
       
-      deploytool.git.whoami();
+      lib.git.whoami();
       handler(config);
     });
   }
