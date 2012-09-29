@@ -19,8 +19,8 @@
   },
   "dependencies": {
     "optimist": "*",
+    "sshconf": "0.x.x",
     "semver": "1.0.x",
-    "nano": "*",
     "colors": "*"
   },
   "bin": {

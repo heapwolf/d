@@ -28,15 +28,10 @@
     ],
     "index": 1
   },
-  "git": {},
   "update": {
     "url": "http://registry.npmjs.org/d/latest",
     "enabled": true,
     "last": null
   },
-  "lastrun": null,
-  "env": {
-    "foo": "bazz",
-    "fuzz": "bar"
-  }
+  "lastrun": null
 }
