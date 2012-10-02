@@ -2,31 +2,37 @@
   "api": {
     "hosts": [
       {
-        "protocol": "http",
+        "protocol": "https",
         "address": "64.27.57.99",
         "port": 8001,
-        "responsive": false
+        "responsive": true
       },
       {
-        "protocol": "http",
+        "protocol": "https",
         "address": "127.0.0.1",
         "port": 8001,
-        "responsive": false
+        "responsive": true
       },
       {
-        "protocol": "http",
+        "protocol": "https",
         "address": "127.0.0.1",
         "port": 8002,
-        "responsive": false
+        "responsive": true
       },
       {
-        "protocol": "http",
+        "protocol": "https",
         "address": "127.0.0.1",
         "port": 8003,
-        "responsive": false
+        "responsive": true
       }
     ],
     "index": 1
+  },
+  "keys": {
+    "id_rsa": ["~/.ssh/id_rsa.pub", "~/.ssh/id_rsa"]
+  },
+  "repos": {
+    "hij1nx/deploytest": "id_rsa"
   },
   "update": {
     "url": "http://registry.npmjs.org/d/latest",

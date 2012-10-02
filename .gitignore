@@ -9,10 +9,9 @@ lib-cov
 *.pid
 *.swp
 *.swo
-benchmarks/graphs
+examples/server/CA
 testing
 node_modules/
-testing
 .coverage_data
 cover_html
 test.js
