@@ -2,25 +2,25 @@
   "api": {
     "hosts": [
       {
-        "protocol": "http",
+        "protocol": "https",
         "address": "64.27.57.99",
         "port": 8001,
-        "responsive": false
+        "responsive": true
       },
       {
-        "protocol": "http",
+        "protocol": "https",
         "address": "127.0.0.1",
         "port": 8001,
         "responsive": true
       },
       {
-        "protocol": "http",
+        "protocol": "https",
         "address": "127.0.0.1",
         "port": 8002,
         "responsive": true
       },
       {
-        "protocol": "http",
+        "protocol": "https",
         "address": "127.0.0.1",
         "port": 8003,
         "responsive": true
@@ -28,7 +28,14 @@
     ],
     "index": 1
   },
-  "git": {
+  "signatures": {
+    "default": { 
+      "hash": "",
+      "ctime": "1349299584311"
+    }
+  },
+  "repos": {
+    "test": "default"
   },
   "update": {
     "url": "http://registry.npmjs.org/d/latest",
@@ -36,4 +43,4 @@
     "last": null
   },
   "lastrun": null
-l
+}

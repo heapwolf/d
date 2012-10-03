@@ -48,7 +48,7 @@ for (var command in commands) {
     for (var i = 0, l = alias.length; i < l; i++) {
       aliases[alias[i]] = commands[command];
     }
-  }   
+  }
 
   for (var arg in usage) {
     args.push(arg);
@@ -61,7 +61,7 @@ for (var command in commands) {
   //
   longlist[command] = [
     command,
-    commands[command].description.join('\r\n'),
+    commands[command].description,
     args.join(' '),
     argdescriptions.join('\r\n  '),
     alias ? alias.join() : ''

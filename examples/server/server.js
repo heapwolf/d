@@ -1,11 +1,13 @@
 
-var store = '/tmp/repos/';
-
 var pushover = require('pushover');
-var repos = pushover(store);
 var argv = require('optimist').argv;
 var uuid = require('node-uuid');
 var crypto = require('crypto');
+var https = require('https');
+var fs = require('fs');
+
+var store = '/tmp/repos/';
+var repos = pushover(store);
 
 repos.on('push', function (push) {
   console.log('push ' + push.repo + '/' + push.commit
@@ -19,9 +21,6 @@ repos.on('fetch', function (fetch) {
   fetch.accept();
 });
 
-
-var https = require('https');
-var fs = require('fs');
 
 var options = {
   key: fs.readFileSync('CA/key.pem'),
@@ -86,13 +85,13 @@ https.createServer(options, function (req, res) {
   //
   var match = req.url.match(/\/auth\/(.*?)\/(.*?)/);
 
-    var key = '';
+    var signature = '';
     var user = match[1];
     var repo = match[2];
 
     req.on('data', function(chunk) {
 
-      key += chunk;
+      signature += chunk;
 
       //
       // 1232 bytes is compatible with a 2048-bit 
@@ -100,7 +99,7 @@ https.createServer(options, function (req, res) {
       // is larger than this it is likely that there
       // is something going wrong. end the request.
       //
-      if (key.length > 1232) {
+      if (signature.length > 1232) {
         res.end();
       }
     });
@@ -112,41 +111,68 @@ https.createServer(options, function (req, res) {
         //
         // only serve this if the public key matches.
         //
-        crypto.createCredentials({ key: key });
+        
 
         // 
         // find the user's root directory and get the public key
         // so that we can compare it with the public key extracted
         // from the private key that is currently in the buffer.
         //
-        fs.createReadStream(path.join(store, 
+        fs.readFile(
+          path.join(store, user),
+          function(err, key) {
+            if (err) {
+              res.end(err);
+            }
+            else {
 
-        var token = uuid.v4();
+              var verify = crypto.createVerify('SHA256');
+              verify.update(data);
 
-        //
-        // Store the new uuid as a key in the tokens hash.
-        // also store the user and repo so that we can be sure
-        // that 
-        //
-        tokens[token] = {
-          ctime: Date.now(),
-          user: user,
-          repo: repo
-        };
+              if (verify.verify(key, signature, 'base64') {
 
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
+                var token = uuid.v4();
 
-        var response = JSON.stringify({ token: token });
-        res.end(response);
+                //
+                // Store the new uuid as a key in the tokens hash.
+                // also store the user and repo so that we can be sure
+                // that 
+                //
+                tokens[token] = {
+                  ctime: Date.now(),
+                  user: user,
+                  repo: repo
+                };
+
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+
+                var response = JSON.stringify({ token: token });
+                res.end(response);
+              }
+              else {
+                res.statusCode = 405;
+                res.end();
+              }
+
+            }
+          }
+        );
 
       }
       else {
+
         //
         // if this is not a match for credential validation, 
-        // just let pushover or something handle the request.
+        // the URL must start with a token. if the token is
+        // in the tokens hash, we can accept this request and
+        // remove the token from the hash.
         //
-        repos.handle(req, res);
+        var token = req.url.match(/\/(.*?)\//);
+
+        if (tokens[token[1]]) {
+          repos.handle(req, res);
+        }
       }
     });
 

@@ -28,11 +28,14 @@
     ],
     "index": 1
   },
-  "keys": {
-    "id_rsa": ["~/.ssh/id_rsa.pub", "~/.ssh/id_rsa"]
+  "signatures": {
+    "default": { 
+      "hash": "",
+      "ctime": "1349299584311"
+    }
   },
   "repos": {
-    "hij1nx/deploytest": "id_rsa"
+    "test": "default"
   },
   "update": {
     "url": "http://registry.npmjs.org/d/latest",
