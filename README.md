@@ -8,7 +8,9 @@ A generic deploy tool for #node.js
  - Only the delta of the code should be deployed. This significantly
  improves user experience while reducing the footprint on the network.
 
-# Features for users
+# Features
+
+## For Users
  - Interactive REPL mode
    - Real-time via a tcp connection
  - Uses public key infrastructure/cryptography
@@ -16,7 +18,7 @@ A generic deploy tool for #node.js
    - Binary differential deployments (only deploy your changes)
    - No snapshot management, simply use git tags and hashses
 
-# Features for developers
+## For developers
  - API endpoint agnostic (trivial to change)
  - Easy to utilize public key Infrastructure schema
  - Very simple plugin architecture
@@ -32,7 +34,8 @@ A generic deploy tool for #node.js
 # Public Key Infrastructure
 Using git over https secures your code when it moves over the network, 
 adding public key infrastructure means less password management. To understand
-how this would work on the receiving side, see this example [server](https://github.com/hij1nx/d/blob/master/examples/server/server.js).
+how this would work on the receiving side, see this example 
+[server](https://github.com/hij1nx/d/blob/master/examples/server/server.js).
 
  - Generate a private key to use with your service
 
