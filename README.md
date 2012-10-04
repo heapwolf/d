@@ -2,23 +2,27 @@
 A generic deploy tool for #node.js
 
 # Motivation
- - A platform as a service must distribute the concerns of connectivity. A 
- deployment tool should cycle through a cache of connection options N times 
- in case of failure. 
- - A deployment tool should communicate with a deployment proxy, not a core 
- API. The deploy proxy should distribute the code it receives to the 
- appropriate target machines.
- - Deployments should be transactional, meaning that if any one step during 
- the process fails, nothing is affected on the target machine.
+ - A single API endpoint is a single point of failure. A deployment tool 
+ should maintain a cache of API endpoints that can be tried in the case of
+ connection failure.
+ - Only the delta of the code should be deployed. This significantly
+ improves user experience while reducing the footprint on the network.
 
-# Features
- - Uses git to manage deployment versioning
- - Leverages public key infrastructure/cryptography
- - Binary differential deployments (only deploy your changes)
- - An interactive REPL mode
- - API endpoint agnostic
- - Uses directory context (similar to npm)
- - Extremely readable plugin architecture
+# Features for users
+ - Interactive REPL mode
+   - Real-time via a tcp connection
+ - Uses public key infrastructure/cryptography
+ - Uses git under the hood
+   - Binary differential deployments (only deploy your changes)
+   - No snapshot management, simply use git tags and hashses
+
+# Features for developers
+ - API endpoint agnostic (trivial to change)
+ - Easy to utilize public key Infrastructure schema
+ - Very simple plugin architecture
+   - add commands, help and arbitrary logic easily
+ - Uses git under the hood
+   - Do anything that git does
 
 # Git as a dependency
  Git is a dependency. Use by hundreds of thousands of people on a daily
@@ -27,7 +31,8 @@ A generic deploy tool for #node.js
 
 # Public Key Infrastructure
 Using git over https secures your code when it moves over the network, 
-adding public key infrastructure means less password management.
+adding public key infrastructure means less password management. To understand
+how this would work on the receiving side, see this example [server](https://github.com/hij1nx/d/blob/master/examples/server/server.js).
 
  - Generate a private key to use with your service
 
