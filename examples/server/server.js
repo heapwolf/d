@@ -171,6 +171,7 @@ https.createServer(options, function (req, res) {
         var token = req.url.match(/\/(.*?)\//);
 
         if (tokens[token[1]]) {
+          delete tokens[token[1]];
           repos.handle(req, res);
         }
       }

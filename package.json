@@ -2,7 +2,7 @@
   "name": "d",
   "description": "A generic deployment tool for nodejs",
   "author": "Paolo Fragomeni <paolo@nodejitsu.com>",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "contributors": [
     { "name": "Paolo Fragomeni", "email": "paolo@nodejitsu.com" }
   ],

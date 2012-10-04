@@ -10,7 +10,7 @@ A generic deploy tool for #node.js
 
 # Features
 
-## For Users
+## For End Users
  - Interactive REPL mode
    - Real-time via a tcp connection
  - Uses public key infrastructure/cryptography
@@ -18,7 +18,7 @@ A generic deploy tool for #node.js
    - Binary differential deployments (only deploy your changes)
    - No snapshot management, simply use git tags and hashses
 
-## For developers
+## For Deployment Tool Developers
  - API endpoint agnostic (trivial to change)
  - Easy to utilize public key Infrastructure schema
  - Very simple plugin architecture
@@ -31,25 +31,10 @@ Git is taken as a dependency. Git is used by hundreds of thousands of
 people on a daily basis. It is well testsed. With Node.js you're taking 
 `libuv`, `openssl` and other dependencies. Git isn't any more significant.
 
-# Public Key Infrastructure
-Using git over https secures your code when it moves over the network, 
-adding public key infrastructure means less password management. To understand
-how this would work on the receiving side, see this example 
-[server](https://github.com/hij1nx/d/blob/master/examples/server/server.js).
-
- - Generate a private key to use with your service
-
-```bash
- $openssl genrsa -out nodejitsu_rsa 1024
-```
-
- - Create a public key to share with the service
-
-```bash
- $openssl rsa -in nodejitsu_rsa -pubout > nodejitsu_rsa.pub
-```
 
 # Usage
+
+
 
 ## Interactive mode (REPL)
 __**Commands**__ `d`
@@ -59,21 +44,27 @@ it to go into interactive mode, a mode similar to the Node.js REPL. Because
 the program will remain running, it is possible to establish long lived 
 connections to the deployment targets; this allows for interactive debugging.
 
+
+
 ## Push code to the cloud
-__**Commands**__ `d push [remote]`, `push`
+__**Commands**__ `d push *[remote]*`, `push`
 
 __**Description**__ Attempt to push the code in the current project to the 
 deployment target(s). You may optionally specify a remote for the code push.
 
+
+
 ## Pull code from the cloud
-__**Commands**__ `d pull [sha1|tag]`, `pull [sha1|tag]`
+__**Commands**__ `d pull *[sha1|tag]*`, `pull *[sha1|tag]*`
 
 __**Description**__ Pull the latest code from for the app. If no version is 
 specified it will pull the latest. If a version is specified, it can be either 
 the sha1 hash for a particular commit or a git tag.
 
+
+
 ## Stop, Restart or Start code
-__**Commands**__ `d start [version]`, `d stop [all]`, `d restart`
+__**Commands**__ `d start *[version]*`, `d stop *[all]*`, `d restart`
 
 __**Description**__ Send the application a start, stop or restart signal. 
 These commands are short hand for `d sig start`, `d sig stop` and `d sig 
@@ -85,13 +76,60 @@ restart`.
  - To stop all of the apps that you have deployed, specify `all` in addition 
  to `stop`.
 
+
+
+## Digital Signing using Public Key Infrastructure (PKI)
+
+__**Commands**__ `d sign *[id]* *[key]* *[phrase]*`, `sign *[id]* *[key]* 
+*[phrase]*``
+
+### Cryptographic Signing For End Users
+__**Description**__ In order to deploy to a repo, the API endpoint must 
+have a copy of your public key. To get a public key you must first create 
+a private key using `openssl`.
+
+```bash
+ $openssl genrsa -out nodejitsu_rsa 1024
+```
+
+```bash
+ $openssl rsa -in nodejitsu_rsa -pubout > nodejitsu_rsa.pub
+```
+
+After you have created a private key, you can then extract its public key. 
+Upload the public key to your service provider (nodejitsu for instance). you
+need to be cautious when copying the key that you do not change it. For 
+example, try this on the `OS X`.
+
+```bash
+cat nodejitsu_rsa.pub | pbcopy
+```
+
+Once you have uploaded your public key, you can sign git repositories and
+then deploy them! For instance you could create a signature, go to a project
+and then add your signature to it.
+
+```bash
+$d sign default ~/.ssh/nodejitsu_rsa "tiny clouds"
+$cd myProject
+$d sign default
+```
+
+### Cryptographic Signing For Deployment Tool Developers
+To understand how this would work on the receiving side, see this 
+[example](https://github.com/hij1nx/d/blob/master/examples/server/server.js).
+
+
+
 ## Send an arbitrary signal to the running code
 __**Commands**__ `d sig <signal>`, `sig <signal>`
 
 __**Description**__ Send an arbitrary signal to an application.
 
+
+
 ## Get info for the deployed code
-__**Commands**__ `d info [name]`, `info [name]`
+__**Commands**__ `d info *[name]*`, `info *[name]*`
 
 __**Description**__ Get information such as the current status of the code, 
 number of network resources it is using, uptime, etc.
@@ -99,14 +137,18 @@ number of network resources it is using, uptime, etc.
  - To get the info for another project, specify the name of the project. For 
  example: `d info hello-world`.
 
+
+
 ## Catalog of all deployed code
 __**Commands**__ `d cat`, `cat`
 
 __**Description**__ Show a catalog of all of the applications that you have 
 currently deployed.
 
+
+
 ## Environment variables
-__**Commands**__ `d env [name] [value]`, `env [name] [value]`
+__**Commands**__ `d env *[name]* *[value]*`, `env *[name]* *[value]*`
 
 __**Description**__ Environment variables are settings that are applied to the
 shell environment when a deployment is made. This command will get, set, clear
@@ -127,6 +169,8 @@ and delete environmental variables.
 
  - To delete environment variable for an app, supply only the `name` of the 
  variable and specify `-d`. For example: `d env <name> -d`.
+
+
 
 ## Logs
 
