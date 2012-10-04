@@ -47,7 +47,7 @@ connections to the deployment targets; this allows for interactive debugging.
 
 
 ## Push code to the cloud
-__**Commands**__ `d push *[remote]*`, `push`
+__**Commands**__ `d push [remote]`, `push`
 
 __**Description**__ Attempt to push the code in the current project to the 
 deployment target(s). You may optionally specify a remote for the code push.
@@ -55,7 +55,7 @@ deployment target(s). You may optionally specify a remote for the code push.
 
 
 ## Pull code from the cloud
-__**Commands**__ `d pull *[sha1|tag]*`, `pull *[sha1|tag]*`
+__**Commands**__ `d pull [sha1|tag]`, `pull [sha1|tag]`
 
 __**Description**__ Pull the latest code from for the app. If no version is 
 specified it will pull the latest. If a version is specified, it can be either 
@@ -64,7 +64,7 @@ the sha1 hash for a particular commit or a git tag.
 
 
 ## Stop, Restart or Start code
-__**Commands**__ `d start *[version]*`, `d stop *[all]*`, `d restart`
+__**Commands**__ `d start [version]`, `d stop [all]`, `d restart`
 
 __**Description**__ Send the application a start, stop or restart signal. 
 These commands are short hand for `d sig start`, `d sig stop` and `d sig 
@@ -80,8 +80,8 @@ restart`.
 
 ## Digital Signing using Public Key Infrastructure (PKI)
 
-__**Commands**__ `d sign *[id]* *[key]* *[phrase]*`, `sign *[id]* *[key]* 
-*[phrase]*``
+__**Commands**__ `d sign [id] [key] [phrase]`, `sign [id] [key] 
+[phrase]``
 
 ### Cryptographic Signing For End Users
 __**Description**__ In order to deploy to a repo, the API endpoint must 
@@ -129,7 +129,7 @@ __**Description**__ Send an arbitrary signal to an application.
 
 
 ## Get info for the deployed code
-__**Commands**__ `d info *[name]*`, `info *[name]*`
+__**Commands**__ `d info [name][]`, `info [name][]`
 
 __**Description**__ Get information such as the current status of the code, 
 number of network resources it is using, uptime, etc.
