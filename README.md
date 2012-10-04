@@ -26,10 +26,10 @@ A generic deploy tool for #node.js
  - Uses git under the hood
    - Do anything that git does
 
-# Git as a dependency
- Git is a dependency. Use by hundreds of thousands of people on a daily
- basis. With Node.js you're taking `libuv`, `openssl` and other dependencies, 
- `git` isn't any more significant.
+# Dependencies
+Git is taken as a dependency. Git is used by hundreds of thousands of 
+people on a daily basis. It is well testsed. With Node.js you're taking 
+`libuv`, `openssl` and other dependencies. Git isn't any more significant.
 
 # Public Key Infrastructure
 Using git over https secures your code when it moves over the network, 
