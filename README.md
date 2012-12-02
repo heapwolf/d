@@ -28,7 +28,7 @@ A generic deploy tool for #node.js
 
 # Dependencies
 Git is taken as a dependency. Git is used by hundreds of thousands of 
-people on a daily basis. It is well testsed. With Node.js you're taking 
+people on a daily basis. It is well tested. With Node.js you're taking 
 `libuv`, `openssl` and other dependencies. Git isn't any more significant.
 
 
