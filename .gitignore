@@ -1,0 +1,17 @@
+coverage.html
+.DS_Store
+lib-cov
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.swp
+*.swo
+examples/server/CA
+testing
+node_modules/
+.coverage_data
+cover_html
+test.js

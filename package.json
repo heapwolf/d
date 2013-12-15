@@ -1,0 +1,34 @@
+{
+  "name": "d",
+  "description": "A generic deployment tool for nodejs",
+  "author": "Paolo Fragomeni <paolo@nodejitsu.com>",
+  "version": "0.0.7",
+  "contributors": [
+    { "name": "Paolo Fragomeni", "email": "paolo@nodejitsu.com" }
+  ],
+  "keywords": [
+    "cli",
+    "nodejitsu",
+    "cloud hosting",
+    "platform-as-a-service",
+    "deployment"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/hij1nx/d.git" 
+  },
+  "dependencies": {
+    "optimist": "*",
+    "sshconf": "0.x.x",
+    "semver": "1.0.x",
+    "colors": "*"
+  },
+  "bin": {
+    "d": "./bin/d"
+  },
+  "main": "./lib/index",
+  "engines": { 
+    "node": ">= 0.9.0" 
+  }
+}
+
